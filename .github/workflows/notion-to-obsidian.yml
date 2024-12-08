@@ -1,0 +1,38 @@
+name: Notion to Obsidian Conversion
+
+on:
+  push:
+    paths:
+      - 'content/*.md'  # Watch for changes to .md files in the 'content' directory
+  workflow_dispatch:   # Allow manual trigger via GitHub Actions UI
+
+jobs:
+  convert_notion_to_obsidian:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'   # You can specify the Python version here
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # Install dependencies if you have any
+
+    - name: Run Notion-to-Obsidian script
+      run: |
+        python scripts/convert_notion_to_obsidian.py content/example.md  # Process the markdown file
+
+    - name: Commit and push changes (if any)
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@users.noreply.github.com'
+        git add content/example.md
+        git commit -m 'Update converted content from Notion to Obsidian format'
+        git push
+      continue-on-error: true  # Ignore errors if no changes are made to example.md
