@@ -69,7 +69,7 @@ See [[Explained Reward Expectation]] for more details. We can see this is the ma
 
 We define the stationary distribution is $\mu = p_\theta(s, a)$, the stationary means that we got same distribution before and after the transition operator applied: $\mu = \mathcal{T} \mu$, **which means that $\mu$ is a eigenvector of $\mathcal{T}$ with eigenvalue 1.**
 
-So we have
+So we have following
 
 $$ \theta^* = \text{argmax}_\theta E_{(s,a)\sim p_\theta(s,a)}[r(s,a)] $$
 
