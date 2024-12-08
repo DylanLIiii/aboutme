@@ -78,5 +78,3 @@ $$ \theta^* = \text{argmax}_\theta E_{(s,a)\sim p_\theta(s,a)}[r(s,a)] $$
 > The answer lies in the nature of policies. A policy can be either **stochastic** or **deterministic**. In the deterministic case, the probability of the chosen action is 1, while others are 0. Generally, we prefer stochastic policies. Consider a game of rock-paper-scissors—a deterministic strategy would be easily exploited by an opponent.
 > A deeper look reveals that deterministic policies can cause optimization issues because the expectation isn't smooth . This occurs because the policy output is a one-hot distribution rather than a regular probability distribution.
 
-
-### Q-function and Value function
