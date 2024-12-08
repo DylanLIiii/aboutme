@@ -3,7 +3,7 @@ name: Notion to Obsidian Conversion
 on:
   push:
     paths:
-      - 'content/*.md'  # Watch for changes to .md files in the 'content' directory
+      - 'content/*.md'  # Trigger on changes to markdown files in the 'content/' directory
   workflow_dispatch:   # Allow manual trigger via GitHub Actions UI
 
 jobs:
@@ -24,15 +24,26 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt  # Install dependencies if you have any
 
-    - name: Run Notion-to-Obsidian script
+    - name: Get modified markdown files
       run: |
-        python scripts/convert_notion_to_obsidian.py content/example.md  # Process the markdown file
+        # Get list of changed markdown files (excluding the ones already processed)
+        echo "Modified Markdown files:"
+        git diff --name-only $GITHUB_SHA $GITHUB_BASE_REF | grep '^content/.*\.md$' > changed_files.txt
+        cat changed_files.txt
+
+    - name: Process each modified file
+      run: |
+        # Read each file from the list and process it with the Python script
+        while IFS= read -r file; do
+          echo "Processing file: $file"
+          python scripts/convert_notion_to_obsidian.py "$file"
+        done < changed_files.txt
 
     - name: Commit and push changes (if any)
       run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions@users.noreply.github.com'
-        git add content/example.md
+        git add content/*.md  # Add all modified markdown files
         git commit -m 'Update converted content from Notion to Obsidian format'
         git push
-      continue-on-error: true  # Ignore errors if no changes are made to example.md
+      continue-on-error: true  # Ignore errors if no changes are made to the files
