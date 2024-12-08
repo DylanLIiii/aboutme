@@ -1,1 +1,0 @@
-- I use self hosted plausible for the analysis
