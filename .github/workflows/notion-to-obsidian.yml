@@ -26,7 +26,10 @@ jobs:
 
     - name: Get modified markdown files
       run: |
-        # Get list of changed markdown files (excluding the ones already processed)
+        # Ensure the repository is up to date with all commits
+        git fetch --prune --unshallow
+
+        # List the changed markdown files in the commit
         echo "Modified Markdown files:"
         git diff --name-only $GITHUB_SHA $GITHUB_BASE_REF | grep '^content/.*\.md$' > changed_files.txt
         cat changed_files.txt
