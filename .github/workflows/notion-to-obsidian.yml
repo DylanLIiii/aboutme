@@ -32,6 +32,13 @@ jobs:
         # List the changed markdown files in the commit
         echo "Modified Markdown files:"
         git diff --name-only $GITHUB_SHA $GITHUB_BASE_REF | grep '^content/.*\.md$' > changed_files.txt
+
+        # If no markdown files have been changed, exit early
+        if [ ! -s changed_files.txt ]; then
+          echo "No markdown files changed. Skipping conversion."
+          exit 0
+        fi
+
         cat changed_files.txt
 
     - name: Process each modified file
